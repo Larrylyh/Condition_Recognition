@@ -1,0 +1,24 @@
+function result=Feature_F(data_T)
+n=length(data_T);
+N=2^nextpow2(n);
+Y=fft(data_T,N)/N*2;
+A=abs(Y);
+A_hht=hilbert(A(1:N/2));
+Amag=abs(A_hht);
+f=51200/N*(0:1:N/2-1);
+A=Amag;
+FF1 = 1/N*sum(A);
+FF2 = 1/(N-1)*sum( (A-FF1).^2 );
+FF3 = sum( (A-FF1).^3 )/N/FF2^1.5;
+FF4 = sum( (A-FF1).^4 )/N/FF2^2;
+FF5 = sum(A.*f)/sum(A);
+FF6 = sqrt( 1/N*sum((f-FF5).^2.*A) );
+FF7 = sqrt( sum(f.^2.*A)/sum(A)  );
+FF8 = sqrt( sum(f.^4.*A)/sum(f.^2.*A)  );
+FF9 = sum(f.^2.*A)/sqrt( sum(f.^4.*A)*sum(A) );
+FF10 = FF6/FF5;
+FF11 = sum( (f-FF5).^3.*A )/N/FF6^3;
+FF12 = sum( (f-FF5).^4.*A )/N/FF6^4;
+FF13 = sum( (f-FF5).^0.5.*A )/N/FF6^0.5;
+result=[FF1 FF2 FF3 FF4 FF5 FF6 FF7 FF8 FF9 FF10 FF11 FF12 FF13];
+end
